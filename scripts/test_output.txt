@@ -1,0 +1,32 @@
+Connected to Ganache (chain ID 1337), block 6
+Hotel  (receiver): 0x0f1C46d0FB5b11748721e182504BA79b6A00c24E  1000.9986 ETH
+Guest  (sender)  : 0x243e53f88DdaBB2Fc5C702424Cd6210F0071e136  998.9999 ETH
+Guest2 (sender)  : 0x923b42DC814fEcA8DCe5BEf6d10B3FC500B28CAd  999.9999 ETH
+
+1. Deploy HotelBooking (room price 1 ETH)
+  Contract address: 0x175C61d0dDf37EF63DEA741EC4787dEc37B5dCC1
+  [PASS] hotel set to deployer
+
+2. Guest books a room and pays the deposit
+  [PASS] wrong deposit amount -> reverted: "Exact deposit required"
+  [PASS] hotel tries to book -> reverted: "Hotel cannot book"
+  RoomBooked event: id=0 deposit=1 ETH  gas used=114736
+  [PASS] deposit locked in contract (1 ETH)
+
+3. Hotel confirms the booking
+  [PASS] guest calls confirmBooking -> reverted: "Only hotel"
+  [PASS] check-in before confirmation -> reverted: "Booking not confirmed"
+  [PASS] status is Confirmed
+
+4. Guest checks in - deposit released to hotel
+  [PASS] another user checks in -> reverted: "Only guest"
+  [PASS] hotel received 1 ETH
+  [PASS] contract balance back to 0
+
+5. Second guest books, then cancels - automatic refund
+  [PASS] guest2 refunded 1 ETH
+  [PASS] cancel the same booking twice -> reverted: "Cannot cancel"
+
+Final balances: hotel 1001.9982 ETH | guest 997.9998 ETH | guest2 999.9999 ETH
+RESULT: 12/12 tests passed
+Output saved to scripts/test_output.txt (Mon Nov  9 16:46:08 GMTST 2026)
